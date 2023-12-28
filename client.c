@@ -87,14 +87,14 @@
 // }
 
 //? IPv6
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdio.h>
 
 // TODO 1. Port selber definieren #define PORT 7923
-// TODO 2. Server selber defi. Home IP_Adress #define SERVER "192.168.178.1"
 #define PORT "12345"
-#define SERVER "::1"
+#define SERVER "localhost"
 
 int main(void)
 {
@@ -106,7 +106,7 @@ int main(void)
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
         fprintf(stderr, "WSAStartup failed.\n");
-        return -1; // 1
+        return -1;
     }
 
     //! Set up hints structure

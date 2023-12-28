@@ -111,13 +111,15 @@
 // }
 
 //? IPv6
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdio.h>
 
 #define PORT "12345" // Define the port as a string
 // Annahme: IP-Adresse des Servers ist "127.0.0.1"
-const char *serverIPAddress;
+// TODO 2. Server selber defi. Home IP_Adress #define SERVER "192.168.178.1" oder .20
+// const char *serverIPAddress = "127.0.0.1";
 
 int main()
 {
@@ -148,10 +150,10 @@ int main()
     serverAddr.ai_family = AF_INET6;      // Use IPv6
     serverAddr.ai_socktype = SOCK_STREAM; // Use TCP
     serverAddr.ai_protocol = IPPROTO_TCP; // Use TCP protocol
-    // serverAddr.ai_flags = AI_PASSIVE;  // For the server, specify AI_PASSIVE to get the local address
+    // serverAddr.ai_flags = AI_PASSIVE;     // For the server, specify AI_PASSIVE to get the local address
 
     //! Resolve the server address and port
-    if (getaddrinfo(serverIPAddress, PORT, &serverAddr, &result) != 0)
+    if (getaddrinfo(NULL, PORT, &serverAddr, &result) != 0)
     {
         fprintf(stderr, "getaddrinfo failed.\n");
         WSACleanup();
@@ -203,19 +205,17 @@ int main()
         printf("Connection accepted from %s: %d\n", clientAddrStr, ntohs(((struct sockaddr_in6 *)&clientAddr)->sin6_port));
     }
 
-    /**
-     * getnameinfo: Diese Funktion übersetzt Netzwerkadressen in lesbare Form.
-     * Hier wird sie verwendet, um die IP-Adresse des Clients und den Port in lesbarer Form zu extrahieren.
-     * Die Parameter sind:
-     * (struct sockaddr *)&clientAddr: Ein Zeiger auf die Adresse, die übersetzt werden soll.
-     * clientAddrLen: Die Länge der Adresse.
-     * clientAddrStr: Ein Zeiger auf den Puffer, in dem die resultierende IP-Adresse gespeichert wird.
-     * sizeof(clientAddrLen): Die Größe des Puffers.
-     *
-     * ntohs(((struct sockaddr_in6 *)&clientAddr)->sin6_port):
-     * Hier wird der Port extrahiert und von Netzwerkbyte-Reihenfolge (Big-Endian) in Hostbyte-Reihenfolge (systemabhängig) umgewandelt.
-     * Dies ist notwendig, da Netzwerkprotokolle oft in Big-Endian-Reihenfolge arbeiten, während die Hostmaschine möglicherweise in Little-Endian-Reihenfolge arbeitet.
-     */
+    // getnameinfo: Diese Funktion übersetzt Netzwerkadressen in lesbare Form.
+    // Hier wird sie verwendet, um die IP-Adresse des Clients und den Port in lesbarer Form zu extrahieren.
+    // Die Parameter sind:
+    // (struct sockaddr *)&clientAddr: Ein Zeiger auf die Adresse, die übersetzt werden soll.
+    // clientAddrLen: Die Länge der Adresse.
+    // clientAddrStr: Ein Zeiger auf den Puffer, in dem die resultierende IP-Adresse gespeichert wird.
+    // sizeof(clientAddrLen): Die Größe des Puffers.
+    //
+    // ntohs(((struct sockaddr_in6 *)&clientAddr)->sin6_port):
+    // Hier wird der Port extrahiert und von Netzwerkbyte-Reihenfolge (Big-Endian) in Hostbyte-Reihenfolge (systemabhängig) umgewandelt.
+    // Dies ist notwendig, da Netzwerkprotokolle oft in Big-Endian-Reihenfolge arbeiten, während die Hostmaschine möglicherweise in Little-Endian-Reihenfolge arbeitet.
 
     while (1)
     {
